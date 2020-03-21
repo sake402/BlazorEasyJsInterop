@@ -3,6 +3,8 @@ Easily call JS interop using Typescript d.ts from Blazor C#
 
 Add this to your scripts
 ------------------------
+
+```
 var functions = {};
 
 window["lt"]["storeProcedure"] = function (key: string, code: string) {
@@ -24,7 +26,7 @@ window["lt"]["executeStored"] = function (key: string, parameters: object[]) {
     var returns = fun.call(this, parameters);
     return returns;
 }
-
+```
 
 Create an executor
 ------------------
