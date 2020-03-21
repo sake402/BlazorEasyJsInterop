@@ -4,7 +4,7 @@ Easily call JS interop using Typescript d.ts from Blazor C#
 Add this to your scripts
 ------------------------
 
-```
+```JavaScript
 var functions = {};
 
 window["lt"]["storeProcedure"] = function (key: string, code: string) {
@@ -30,7 +30,7 @@ window["lt"]["executeStored"] = function (key: string, parameters: object[]) {
 
 Create an executor
 ------------------
-```
+```C#
 public class Executor : IScriptExecutor
 {
     IJSRuntime Javascript;
@@ -45,7 +45,7 @@ public class Executor : IScriptExecutor
 ```
 Generate code
 -------------
-```
+```C#
 var generator = new Generator(new Executor(), new GeneratorOptions()
 {
 });
@@ -86,6 +86,6 @@ var scope = await generator.StoredProcedure(async scope =>
  ```
  Execute the code
  -------------------
- ```
+ ```C#
 _ = scope.Execute<object>(null, true);
  ```
