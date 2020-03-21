@@ -46,7 +46,7 @@ public class Executor : IScriptExecutor
 Generate code
 -------------
 ```
-var generator = new Generator(new ConsoleExecutor(), new GeneratorOptions()
+var generator = new Generator(new Executor(), new GeneratorOptions()
 {
 });
 Leaflet.Map map = null;
