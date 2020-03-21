@@ -48,7 +48,6 @@ Generate code
 ```
 var generator = new Generator(new ConsoleExecutor(), new GeneratorOptions()
 {
-    DisableParameterBag = true
 });
 Leaflet.Map map = null;
 var scope = await generator.StoredProcedure(async scope =>
