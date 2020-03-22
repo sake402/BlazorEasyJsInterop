@@ -14,6 +14,7 @@ namespace LivingThing.TCCS.Scopes
     {
         public Generator Generator { get; }
         public GeneratorScope ParentScope { get; }
+        public IList<GeneratorScope> ChildScopes { get; } = new List<GeneratorScope>();
         public ParameterBag ParameterBag => Generator.ParameterBag;
         public IList<ICode> Codes { get; } = new List<ICode>();
 
@@ -30,6 +31,10 @@ namespace LivingThing.TCCS.Scopes
             _save = save;
             ParentScope = parentScope;
             generator.Scopes.Push(this);
+            if (parentScope != null)
+            {
+                parentScope.ChildScopes.Add(this);
+            }
         }
 
         public Task<TDefinition> GetDefinition<TDefinition>(params object[] parameters) where TDefinition : class
@@ -64,6 +69,12 @@ namespace LivingThing.TCCS.Scopes
                 return definition;
             }
         }
+
+        public TDefinition PropertyInitializer<TDefinition>(Action<IGeneratorScope, TDefinition> initialize, string name = null) where TDefinition : class
+        {
+            return Instantiate<TDefinition>(initialize, name, true);
+        }
+
         public void Return<TDefinition>(TDefinition definition) where TDefinition : class
         {
             var result = Generator.Definitions[definition].Interceptor.Target as ICodeResult;
@@ -137,5 +148,11 @@ namespace LivingThing.TCCS.Scopes
             return string.Join(";\r\n", Codes.Select(t => t.ToString()).Where(c => !string.IsNullOrEmpty(c)));
         }
 
+        public T Literal<T>(string code) where T:class
+        {
+            var literal = new LiteralCode(this, code);
+            var definition = new Interceptor<T>(Generator, literal).GetProxy(null);
+            return definition;
+        }
     }
 }

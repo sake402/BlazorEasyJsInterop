@@ -16,7 +16,7 @@ namespace LivingThing.TCCS.Lexicon
 
         public override string ToString()
         {
-            var creator = string.Format(ClassCreator, Parameters);
+            var creator = string.Format(ClassCreator, GetParameters());
             return $"var {VariableName} = {creator}";
         }
     }

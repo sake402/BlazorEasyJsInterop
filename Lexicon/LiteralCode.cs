@@ -1,8 +1,9 @@
-﻿using LivingThing.TCCS.Scopes;
+﻿using LivingThing.TCCS.Interface;
+using LivingThing.TCCS.Scopes;
 
 namespace LivingThing.TCCS.Lexicon
 {
-    internal class LiteralCode : CodeConstruct
+    internal class LiteralCode : CodeConstruct, ICodeResult
     {
         public LiteralCode(GeneratorScope scope, string code) : base(scope, null, null)
         {
@@ -12,7 +13,7 @@ namespace LivingThing.TCCS.Lexicon
         string Code { get; }
         public override string ToString()
         {
-            return Code;
+            return $"var {VariableName} = {Code}";
         }
     }
 }

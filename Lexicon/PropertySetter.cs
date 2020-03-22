@@ -1,5 +1,6 @@
 ﻿using LivingThing.TCCS.Interface;
 using LivingThing.TCCS.Scopes;
+using System.Collections;
 using System.Reflection;
 
 namespace LivingThing.TCCS.Lexicon
@@ -15,7 +16,6 @@ namespace LivingThing.TCCS.Lexicon
         MethodInfo Method { get; }
         public override string ToString()
         {
-            //return $"{Method.Name.Replace("set_", "")} : {GetParameters()[0]}";
             return $"{From.VariableName}.{Method.Name.Replace("set_", "")} = {GetParameters()[0]}";
         }
     }

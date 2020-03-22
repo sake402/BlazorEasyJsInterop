@@ -1,7 +1,10 @@
 ﻿using LivingThing.TCCS.Interface;
+using LivingThing.TCCS.Scopes;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace LivingThing.TCCS.Core
@@ -20,7 +23,8 @@ namespace LivingThing.TCCS.Core
         }
 
         public Dictionary<string, object> Parameters { get; } = new Dictionary<string, object>();
-        public string Set(IParameterized setter, int index, object value)
+
+        string Put(IParameterized setter, int index, object value)
         {
             if (_disabled)
             {
@@ -37,6 +41,46 @@ namespace LivingThing.TCCS.Core
             var key = setter.ParameterName + (index >= 0 ? "_" + index : "");
             Parameters[key] = value;
             return $"p.{key}";
+        }
+
+        public string Set(IParameterized setter, int index, object value)
+        {
+            if (value is string pk && pk.StartsWith("p.")) //identify already set parameter name
+                return pk;
+            if (value is string lv && lv.StartsWith("$")) //identify local variable name
+                return lv;
+            if (value is IEnumerable array && value.GetType() != typeof(string))
+            {
+                bool hasLocalVariable = false;
+                foreach (var item in array)
+                {
+                    if (item is string str)
+                    {
+                        if (str.StartsWith("$"))
+                        {
+                            hasLocalVariable = true;
+                            break;
+                        }
+                    }
+                }
+                if (hasLocalVariable)
+                {
+                    List<object> objs = new List<object>();
+                    foreach (var item in array)
+                    {
+                        if (item is string str && (str.StartsWith("$")/*|| str.StartsWith("p.")*/))
+                        {
+                            objs.Add(str);
+                        }
+                        else
+                        {
+                            objs.Add(Put(setter, index, item));
+                        }
+                    }
+                    return "[" + string.Join(", ", objs.Select(o => o.ToString())) + "]";
+                }
+            }
+            return Put(setter, index, value);
         }
 
         public string SetMany(IParameterized setter, params object[] parameters)
@@ -67,6 +111,30 @@ namespace LivingThing.TCCS.Core
             for (int i = 0; i < parameters.Length; i++)
             {
                 //Set(def.Interceptor.Target, i, parameters[i]);
+            }
+        }
+
+        GeneratorScope GetScopeOf<T>(GeneratorScope from)
+        {
+            if (from is ITypedGeneratorScope tScope && tScope.ScopeType == typeof(T))
+            {
+                return from;
+            }
+            foreach(var ch in from.ChildScopes)
+            {
+                var scope = GetScopeOf<T>(ch);
+                if (scope != null)
+                    return scope;
+            }
+            return null;
+        }
+
+        void Set<T>(IGeneratorScope scope, Expression<Func<T, object>> path, object value, int index = 0)
+        {
+            GeneratorScope _scope = GetScopeOf<T>(scope as GeneratorScope);
+            if (_scope != null)
+            {
+
             }
         }
 

@@ -7,7 +7,7 @@ namespace LivingThing.TCCS.Lexicon
     internal class InstanceInitializer : LiteralCode, ICodeResult
     {
         public InstanceInitializer(GeneratorScope generatorScope, Type type, string instanceName, string instanceCreation, object[] paramaters) :
-            base(generatorScope, $"var {instanceName} = {(paramaters.Length > 0 ? string.Format(instanceCreation, paramaters) : instanceCreation)}")
+            base(generatorScope, $"{(paramaters.Length > 0 ? string.Format(instanceCreation, paramaters) : instanceCreation)}")
         {
             Type = type;
             variableName = instanceName;

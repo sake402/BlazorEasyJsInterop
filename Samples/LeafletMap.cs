@@ -20,7 +20,6 @@ namespace LivingThing.TCCS.Samples
             Leaflet.Map map = null;
             var scope = await generator.StoredProcedure(async scope =>
             {
-                Union<int, double, string> cc = "";
                 var L = await scope.GetDefinition<Leaflet>();
                 map = L.map("map", scope.Instantiate<Leaflet.MapOptions>((scope, op) =>
                 {
@@ -31,8 +30,8 @@ namespace LivingThing.TCCS.Samples
                         ll.lat = 51.5;
                         ll.lng = -0.09;
                     }, "centerOptions", true));
-                }, "mapOptions", true));
-                var map2 = map.setView(new Union<Leaflet.LatLng, Leaflet.LatLngLiteral, Leaflet.LatLngTuple>(scope.Instantiate<Leaflet.LatLngLiteral>((scope, ll) =>
+                }, "mapOptions", true))
+                .setView(new Union<Leaflet.LatLng, Leaflet.LatLngLiteral, Leaflet.LatLngTuple>(scope.Instantiate<Leaflet.LatLngLiteral>((scope, ll) =>
                 {
                     ll.lat = 51.5;
                     ll.lng = -0.09;

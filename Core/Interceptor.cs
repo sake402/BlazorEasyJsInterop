@@ -10,6 +10,8 @@ namespace LivingThing.TCCS.Core
 {
     internal class Interceptor<TDefinition> : DynamicObject, IScriptInterceptor, IInterceptor where TDefinition: class
     {
+        static ProxyGenerator generator = new ProxyGenerator();
+
         public Interceptor(Generator generator, ICodeConstruct target)
         {
             Generator = generator;
@@ -134,20 +136,6 @@ namespace LivingThing.TCCS.Core
 
         public async Task<TDefinition> GetProxyAsync(object[] parameters)
         {
-            //await JavaScript.Queue(j =>
-            //{
-            //    Attribute = typeof(TDefinition).GetCustomAttribute<TypeScriptAttribute>();
-            //    string initCode = Attribute.DefinitionInitCode;
-            //    if (!Attribute.Static)
-            //    {
-            //        j.InvokeVoidAsync($"window[\"{typeof(TDefinition).Name}\"]={{ {initCode} }};", parameters);
-            //    }
-            //    else
-            //    {
-            //        j.InvokeVoidAsync($"{initCode};", parameters);
-            //    }
-            //});
-            ProxyGenerator generator = new ProxyGenerator();
             if (typeof(TDefinition).IsInterface)
             {
                 var r = generator.CreateInterfaceProxyWithoutTarget<TDefinition>(new ProxyGenerationOptions()
@@ -169,7 +157,6 @@ namespace LivingThing.TCCS.Core
         internal TDefinition GetProxy(IWatchDefinition watcher)
         {
             //return this.ActLike<TDefinition>();
-            ProxyGenerator generator = new ProxyGenerator();
             if (typeof(TDefinition).IsInterface)
             {
                 var r = generator.CreateInterfaceProxyWithoutTarget<TDefinition>(new ProxyGenerationOptions()

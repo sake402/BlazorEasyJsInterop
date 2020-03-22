@@ -8,7 +8,7 @@ using System.Text;
 
 namespace LivingThing.TCCS.Scopes
 {
-    internal class InstanceInitializerScope : GeneratorScope, IWatchDefinition
+    internal class InstanceInitializerScope : GeneratorScope, ITypedGeneratorScope, IWatchDefinition, ICodeResult
     {
         public InstanceInitializerScope(Generator generator, Type instanceType, string instanceName, GeneratorScope parentScope, bool onlyProperyInitialization) 
             : base(generator, false, parentScope)
@@ -41,6 +41,11 @@ namespace LivingThing.TCCS.Scopes
         }
 
         public string PropertyAssignedName { get; set; }
+
+        public string VariableName => InstanceName;
+
+        public Type ScopeType => InstanceType;
+
         public void OnDefinitionAssignedTo(MethodInfo method)
         {
             PropertyAssignedName = method.Name.Replace("set_", "");

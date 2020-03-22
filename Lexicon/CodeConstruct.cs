@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 using LivingThing.TCCS.Interface;
 using LivingThing.TCCS.Scopes;
 using LivingThing.TCCS.Util;
@@ -29,19 +32,67 @@ namespace LivingThing.TCCS.Lexicon
 
         ICodeConstruct ICodeConstruct.From => From;
 
+        object Resolve(object parameter, int index)
+        {
+            if (parameter != null && Scope.Generator.Definitions.ContainsKey(parameter))
+            {
+                var ic = Scope.Generator.Definitions[parameter];
+                var target = ic.Interceptor.Target;
+                if (target is ICodeResult result)
+                    return result.VariableName;
+            }
+            if (parameter is ICodeResult mresult)
+                return mresult.VariableName;
+            return Scope.ParameterBag.Set(this, Parameters.Length > 1 ? index : -1, parameter);
+        }
+
         protected object[] GetParameters()
         {
             return Parameters.Select((p, i) =>
             {
-                var pp = p.UnWrap();
-                if (pp != null && Scope.Generator.Definitions.ContainsKey(pp))
-                {
-                    var ic = Scope.Generator.Definitions[pp];
-                    var target = ic.Interceptor.Target;
-                    if (target is ICodeResult result)
-                        return result.VariableName;
-                }
-                return Scope.ParameterBag.Set(this, Parameters.Length > 1 ? i : -1, pp);
+                var parameter = p.UnWrap(Scope, this, Parameters.Length > 1 ? i : -1);
+                //if (parameter is IEnumerable array && !(parameter is string))
+                //{
+                //    string sparam = "[ ";
+                //    foreach (var item in array)
+                //    {
+                //        sparam += item.ToString();
+                //        sparam += ", ";
+                //    }
+                //    sparam = sparam.Trim(',', ' ');
+                //    sparam += " ]";
+                //    return sparam;
+                //}
+                return parameter;
+                //if (type.Name.EndsWith("Proxy"))
+                //{
+                //    var target = scope.Generator.Definitions[parameter].Interceptor.Target;
+                //    if (target is ICodeResult codeResult)
+                //        return codeResult.VariableName;
+                //    return null;// UnWrap(generator.Definitions[parameter].Interceptor.Target, generator);
+                //}
+                //if (paramemeter != null)
+                //{
+                //    var type = paramemeter.GetType();
+                //    if (type.IsArray)
+                //    {
+                //        var array = paramemeter as IEnumerable;
+                //        var enumerator = array.GetEnumerator();
+                //        enumerator.MoveNext();
+                //        object first = enumerator.Current;
+                //        var firstType = first?.GetType();
+                //        if (firstType != null && typeof(ICode).IsAssignableFrom(firstType))
+                //        {
+                //            List<object> items = new List<object>();
+                //            foreach (var item in array)
+                //            {
+                //                items.Add(Resolve(item, i + Parameters.Length));
+                //            }
+                //            return items.ToArray();
+                //        }
+                //    }
+                //}
+                //return Resolve(paramemeter, i);
             }).ToArray();
         }
 
