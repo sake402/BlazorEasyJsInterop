@@ -135,12 +135,12 @@ namespace LivingThing.TCCS.Definitions
 			double lat { get; set; }
 			double lng { get; set; }
 		}
-		public class LatLngTuple : TypeAlias
+		public class LatLngTuple : TypeAlias<object[]>
 		{
 			public LatLngTuple(object[] value) { Value = value; }
 			public static implicit operator LatLngTuple(object[] value) { return new LatLngTuple(value); }
 		}
-		public class LatLngExpression : TypeAlias
+		public class LatLngExpression : TypeAlias<Union<LatLng, LatLngLiteral, LatLngTuple>>
 		{
 			public LatLngExpression(Union<LatLng, LatLngLiteral, LatLngTuple> value) { Value = value; }
 			public static implicit operator LatLngExpression(Union<LatLng, LatLngLiteral, LatLngTuple> value) { return new LatLngExpression(value); }
@@ -176,19 +176,19 @@ namespace LivingThing.TCCS.Definitions
 			public virtual bool isValid() => default(bool);
 			public LatLngBounds() { }
 		}
-		public class LatLngBoundsLiteral : TypeAlias
+		public class LatLngBoundsLiteral : TypeAlias<LatLngTuple[]>
 		{
 			public LatLngBoundsLiteral(LatLngTuple[] value) { Value = value; }
 			public static implicit operator LatLngBoundsLiteral(LatLngTuple[] value) { return new LatLngBoundsLiteral(value); }
 		}
-		public class LatLngBoundsExpression : TypeAlias
+		public class LatLngBoundsExpression : TypeAlias<Union<LatLngBounds, LatLngBoundsLiteral>>
 		{
 			public LatLngBoundsExpression(Union<LatLngBounds, LatLngBoundsLiteral> value) { Value = value; }
 			public static implicit operator LatLngBoundsExpression(Union<LatLngBounds, LatLngBoundsLiteral> value) { return new LatLngBoundsExpression(value); }
 		}
 		public virtual LatLngBounds latLngBounds(LatLngExpression southWest, LatLngExpression northEast) => default(LatLngBounds);
 		public virtual LatLngBounds latLngBounds(LatLngExpression[] latlngs) => default(LatLngBounds);
-		public class PointTuple : TypeAlias
+		public class PointTuple : TypeAlias<object[]>
 		{
 			public PointTuple(object[] value) { Value = value; }
 			public static implicit operator PointTuple(object[] value) { return new PointTuple(value); }
@@ -218,7 +218,7 @@ namespace LivingThing.TCCS.Definitions
 		{
 			public virtual double z { get; set; }
 		}
-		public class PointExpression : TypeAlias
+		public class PointExpression : TypeAlias<Union<Point, PointTuple>>
 		{
 			public PointExpression(Union<Point, PointTuple> value) { Value = value; }
 			public static implicit operator PointExpression(Union<Point, PointTuple> value) { return new PointExpression(value); }
@@ -230,7 +230,7 @@ namespace LivingThing.TCCS.Definitions
 			double x { get; set; }
 			double y { get; set; }
 		}
-		public class BoundsLiteral : TypeAlias
+		public class BoundsLiteral : TypeAlias<object[]>
 		{
 			public BoundsLiteral(object[] value) { Value = value; }
 			public static implicit operator BoundsLiteral(object[] value) { return new BoundsLiteral(value); }
@@ -251,79 +251,79 @@ namespace LivingThing.TCCS.Definitions
 			public virtual bool overlaps(BoundsExpression otherBounds) => default(bool);
 			public Bounds() { }
 		}
-		public class BoundsExpression : TypeAlias
+		public class BoundsExpression : TypeAlias<Union<Bounds, BoundsLiteral>>
 		{
 			public BoundsExpression(Union<Bounds, BoundsLiteral> value) { Value = value; }
 			public static implicit operator BoundsExpression(Union<Bounds, BoundsLiteral> value) { return new BoundsExpression(value); }
 		}
 		public virtual Bounds bounds(PointExpression topLeft, PointExpression bottomRight) => default(Bounds);
 		public virtual Bounds bounds(Union<Point[], BoundsLiteral> points) => default(Bounds);
-		public class LeafletEventHandlerFn : TypeAlias
+		public class LeafletEventHandlerFn : TypeAlias<Action<LeafletEvent>>
 		{
 			public LeafletEventHandlerFn(Action<LeafletEvent> value) { Value = value; }
 			public static implicit operator LeafletEventHandlerFn(Action<LeafletEvent> value) { return new LeafletEventHandlerFn(value); }
 		}
-		public class LayersControlEventHandlerFn : TypeAlias
+		public class LayersControlEventHandlerFn : TypeAlias<Action<LayersControlEvent>>
 		{
 			public LayersControlEventHandlerFn(Action<LayersControlEvent> value) { Value = value; }
 			public static implicit operator LayersControlEventHandlerFn(Action<LayersControlEvent> value) { return new LayersControlEventHandlerFn(value); }
 		}
-		public class LayerEventHandlerFn : TypeAlias
+		public class LayerEventHandlerFn : TypeAlias<Action<LayerEvent>>
 		{
 			public LayerEventHandlerFn(Action<LayerEvent> value) { Value = value; }
 			public static implicit operator LayerEventHandlerFn(Action<LayerEvent> value) { return new LayerEventHandlerFn(value); }
 		}
-		public class ResizeEventHandlerFn : TypeAlias
+		public class ResizeEventHandlerFn : TypeAlias<Action<ResizeEvent>>
 		{
 			public ResizeEventHandlerFn(Action<ResizeEvent> value) { Value = value; }
 			public static implicit operator ResizeEventHandlerFn(Action<ResizeEvent> value) { return new ResizeEventHandlerFn(value); }
 		}
-		public class PopupEventHandlerFn : TypeAlias
+		public class PopupEventHandlerFn : TypeAlias<Action<PopupEvent>>
 		{
 			public PopupEventHandlerFn(Action<PopupEvent> value) { Value = value; }
 			public static implicit operator PopupEventHandlerFn(Action<PopupEvent> value) { return new PopupEventHandlerFn(value); }
 		}
-		public class TooltipEventHandlerFn : TypeAlias
+		public class TooltipEventHandlerFn : TypeAlias<Action<TooltipEvent>>
 		{
 			public TooltipEventHandlerFn(Action<TooltipEvent> value) { Value = value; }
 			public static implicit operator TooltipEventHandlerFn(Action<TooltipEvent> value) { return new TooltipEventHandlerFn(value); }
 		}
-		public class ErrorEventHandlerFn : TypeAlias
+		public class ErrorEventHandlerFn : TypeAlias<Action<ErrorEvent>>
 		{
 			public ErrorEventHandlerFn(Action<ErrorEvent> value) { Value = value; }
 			public static implicit operator ErrorEventHandlerFn(Action<ErrorEvent> value) { return new ErrorEventHandlerFn(value); }
 		}
-		public class LocationEventHandlerFn : TypeAlias
+		public class LocationEventHandlerFn : TypeAlias<Action<LocationEvent>>
 		{
 			public LocationEventHandlerFn(Action<LocationEvent> value) { Value = value; }
 			public static implicit operator LocationEventHandlerFn(Action<LocationEvent> value) { return new LocationEventHandlerFn(value); }
 		}
-		public class LeafletMouseEventHandlerFn : TypeAlias
+		public class LeafletMouseEventHandlerFn : TypeAlias<Action<LeafletMouseEvent>>
 		{
 			public LeafletMouseEventHandlerFn(Action<LeafletMouseEvent> value) { Value = value; }
 			public static implicit operator LeafletMouseEventHandlerFn(Action<LeafletMouseEvent> value) { return new LeafletMouseEventHandlerFn(value); }
 		}
-		public class LeafletKeyboardEventHandlerFn : TypeAlias
+		public class LeafletKeyboardEventHandlerFn : TypeAlias<Action<LeafletKeyboardEvent>>
 		{
 			public LeafletKeyboardEventHandlerFn(Action<LeafletKeyboardEvent> value) { Value = value; }
 			public static implicit operator LeafletKeyboardEventHandlerFn(Action<LeafletKeyboardEvent> value) { return new LeafletKeyboardEventHandlerFn(value); }
 		}
-		public class ZoomAnimEventHandlerFn : TypeAlias
+		public class ZoomAnimEventHandlerFn : TypeAlias<Action<ZoomAnimEvent>>
 		{
 			public ZoomAnimEventHandlerFn(Action<ZoomAnimEvent> value) { Value = value; }
 			public static implicit operator ZoomAnimEventHandlerFn(Action<ZoomAnimEvent> value) { return new ZoomAnimEventHandlerFn(value); }
 		}
-		public class DragEndEventHandlerFn : TypeAlias
+		public class DragEndEventHandlerFn : TypeAlias<Action<DragEndEvent>>
 		{
 			public DragEndEventHandlerFn(Action<DragEndEvent> value) { Value = value; }
 			public static implicit operator DragEndEventHandlerFn(Action<DragEndEvent> value) { return new DragEndEventHandlerFn(value); }
 		}
-		public class TileEventHandlerFn : TypeAlias
+		public class TileEventHandlerFn : TypeAlias<Action<TileEvent>>
 		{
 			public TileEventHandlerFn(Action<TileEvent> value) { Value = value; }
 			public static implicit operator TileEventHandlerFn(Action<TileEvent> value) { return new TileEventHandlerFn(value); }
 		}
-		public class TileErrorEventHandlerFn : TypeAlias
+		public class TileErrorEventHandlerFn : TypeAlias<Action<TileErrorEvent>>
 		{
 			public TileErrorEventHandlerFn(Action<TileErrorEvent> value) { Value = value; }
 			public static implicit operator TileErrorEventHandlerFn(Action<TileErrorEvent> value) { return new TileErrorEventHandlerFn(value); }
@@ -1279,7 +1279,7 @@ namespace LivingThing.TCCS.Definitions
 			string className { get; set; }
 			double keepBuffer { get; set; }
 		}
-		public class DoneCallback : TypeAlias
+		public class DoneCallback : TypeAlias<Action<Error, HTMLElement>>
 		{
 			public DoneCallback(Action<Error, HTMLElement> value) { Value = value; }
 			public static implicit operator DoneCallback(Action<Error, HTMLElement> value) { return new DoneCallback(value); }
@@ -1378,7 +1378,7 @@ namespace LivingThing.TCCS.Definitions
 			public virtual TileLayer.WMS wms(string baseUrl, WMSOptions options) => default(TileLayer.WMS);
 			public _TileLayer() { }
 		}
-		public class CrossOrigin : TypeAlias
+		public class CrossOrigin : TypeAlias<Union<bool, string>>
 		{
 			public CrossOrigin(Union<bool, string> value) { Value = value; }
 			public static implicit operator CrossOrigin(Union<bool, string> value) { return new CrossOrigin(value); }
@@ -1607,7 +1607,7 @@ namespace LivingThing.TCCS.Definitions
 			public FeatureGroup() { }
 		}
 		public virtual FeatureGroup featureGroup(Layer[] layers) => default(FeatureGroup);
-		public class StyleFunction<P> : TypeAlias
+		public class StyleFunction<P> : TypeAlias<Func<geojson.Feature<geojson.GeometryObject, P>, PathOptions>>
 		{
 			public StyleFunction(Func<geojson.Feature<geojson.GeometryObject, P>, PathOptions> value) { Value = value; }
 			public static implicit operator StyleFunction<P>(Func<geojson.Feature<geojson.GeometryObject, P>, PathOptions> value) { return new StyleFunction<P>(value); }
@@ -1834,6 +1834,7 @@ namespace LivingThing.TCCS.Definitions
 			public virtual void onRemove(Map map) { }
 			public Control() { }
 		}
+		[Name("L.control")]
 		public partial class control
 		{
 			public virtual Control.Zoom zoom(Control.ZoomOptions options) => default(Control.Zoom);
@@ -1879,7 +1880,7 @@ namespace LivingThing.TCCS.Definitions
 			bool closeOnClick { get; set; }
 			bool closeOnEscapeKey { get; set; }
 		}
-		public class Content : TypeAlias
+		public class Content : TypeAlias<Union<string, HTMLElement>>
 		{
 			public Content(Union<string, HTMLElement> value) { Value = value; }
 			public static implicit operator Content(Union<string, HTMLElement> value) { return new Content(value); }
@@ -2051,12 +2052,12 @@ namespace LivingThing.TCCS.Definitions
 		}
 		public partial class DomEvent
 		{
-			public class EventHandlerFn : TypeAlias
+			public class EventHandlerFn : TypeAlias<Action<Event>>
 			{
 				public EventHandlerFn(Action<Event> value) { Value = value; }
 				public static implicit operator EventHandlerFn(Action<Event> value) { return new EventHandlerFn(value); }
 			}
-			public class PropagableEvent : TypeAlias
+			public class PropagableEvent : TypeAlias<Union<LeafletMouseEvent, LeafletKeyboardEvent, LeafletEvent, Event>>
 			{
 				public PropagableEvent(Union<LeafletMouseEvent, LeafletKeyboardEvent, LeafletEvent, Event> value) { Value = value; }
 				public static implicit operator PropagableEvent(Union<LeafletMouseEvent, LeafletKeyboardEvent, LeafletEvent, Event> value) { return new PropagableEvent(value); }

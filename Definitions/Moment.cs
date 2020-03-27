@@ -15,10 +15,10 @@ namespace LivingThing.TCCS.Definitions
 	public partial class moment
 	{
 		//Name["moment"]
-		public extern static Moment _moment(MomentInput inp, MomentFormatSpecification format, bool strict);
+		public virtual Moment _moment(MomentInput inp, MomentFormatSpecification format, bool strict) => default(Moment);
 		//Name["moment"]
-		public extern static Moment _moment(MomentInput inp, MomentFormatSpecification format, string language, bool strict);
-		public class RelativeTimeKey
+		public virtual Moment _moment(MomentInput inp, MomentFormatSpecification format, string language, bool strict) => default(Moment);
+		public class RelativeTimeKey : Enumerated
 		{
 			public static string s = "s";
 			public static string ss = "ss";
@@ -32,9 +32,10 @@ namespace LivingThing.TCCS.Definitions
 			public static string MM = "MM";
 			public static string y = "y";
 			public static string yy = "yy";
-			public extern static implicit operator RelativeTimeKey(string value);
+			public static implicit operator RelativeTimeKey(string value) { return new RelativeTimeKey(value); }
+			public RelativeTimeKey(object value) { Value = value; }
 		}
-		public class CalendarKey
+		public class CalendarKey : Enumerated
 		{
 			public static string sameDay = "sameDay";
 			public static string nextDay = "nextDay";
@@ -42,9 +43,10 @@ namespace LivingThing.TCCS.Definitions
 			public static string nextWeek = "nextWeek";
 			public static string lastWeek = "lastWeek";
 			public static string sameElse = "sameElse";
-			public extern static implicit operator CalendarKey(string value);
+			public static implicit operator CalendarKey(string value) { return new CalendarKey(value); }
+			public CalendarKey(object value) { Value = value; }
 		}
-		public class LongDateFormatKey
+		public class LongDateFormatKey : Enumerated
 		{
 			public static string LTS = "LTS";
 			public static string LT = "LT";
@@ -58,7 +60,8 @@ namespace LivingThing.TCCS.Definitions
 			public static string ll = "ll";
 			public static string lll = "lll";
 			public static string llll = "llll";
-			public extern static implicit operator LongDateFormatKey(string value);
+			public static implicit operator LongDateFormatKey(string value) { return new LongDateFormatKey(value); }
+			public LongDateFormatKey(object value) { Value = value; }
 		}
 		public partial interface Locale
 		{
@@ -70,7 +73,7 @@ namespace LivingThing.TCCS.Definitions
 			string postformat(string inp);
 			string relativeTime(double n, bool withoutSuffix, RelativeTimeKey key, bool isFuture);
 			string pastFuture(double diff, string absRelTime);
-			undefined set(Object config);
+			void set(Object config);
 			string[] months();
 			string[] monthsShort();
 			double monthsParse(string monthName, string format, bool strict);
@@ -100,9 +103,10 @@ namespace LivingThing.TCCS.Definitions
 			double dow { get; set; }
 			double doy { get; set; }
 		}
-		public class CalendarSpecVal
+		public class CalendarSpecVal : TypeAlias
 		{
-			public extern static implicit operator CalendarSpecVal(Union<string, Func<MomentInput, Moment, string>> value);
+			public CalendarSpecVal(Union<string, Func<MomentInput, Moment, string>> value) { Value = value; }
+			public static implicit operator CalendarSpecVal(Union<string, Func<MomentInput, Moment, string>> value) { return new CalendarSpecVal(value); }
 		}
 		public partial interface CalendarSpec
 		{
@@ -114,13 +118,15 @@ namespace LivingThing.TCCS.Definitions
 			CalendarSpecVal sameElse { get; set; }
 			Union<CalendarSpecVal, undefined> this[string x] { get; set; }
 		}
-		public class RelativeTimeSpecVal
+		public class RelativeTimeSpecVal : TypeAlias
 		{
-			public extern static implicit operator RelativeTimeSpecVal(Union<string, Func<double, bool, RelativeTimeKey, bool, string>> value);
+			public RelativeTimeSpecVal(Union<string, Func<double, bool, RelativeTimeKey, bool, string>> value) { Value = value; }
+			public static implicit operator RelativeTimeSpecVal(Union<string, Func<double, bool, RelativeTimeKey, bool, string>> value) { return new RelativeTimeSpecVal(value); }
 		}
-		public class RelativeTimeFuturePastVal
+		public class RelativeTimeFuturePastVal : TypeAlias
 		{
-			public extern static implicit operator RelativeTimeFuturePastVal(Union<string, Func<string, string>> value);
+			public RelativeTimeFuturePastVal(Union<string, Func<string, string>> value) { Value = value; }
+			public static implicit operator RelativeTimeFuturePastVal(Union<string, Func<string, string>> value) { return new RelativeTimeFuturePastVal(value); }
 		}
 		public partial interface RelativeTimeSpec
 		{
@@ -154,13 +160,15 @@ namespace LivingThing.TCCS.Definitions
 			string lll { get; set; }
 			string llll { get; set; }
 		}
-		public class MonthWeekdayFn
+		public class MonthWeekdayFn : TypeAlias
 		{
-			public extern static implicit operator MonthWeekdayFn(Func<Moment, string, string> value);
+			public MonthWeekdayFn(Func<Moment, string, string> value) { Value = value; }
+			public static implicit operator MonthWeekdayFn(Func<Moment, string, string> value) { return new MonthWeekdayFn(value); }
 		}
-		public class WeekdaySimpleFn
+		public class WeekdaySimpleFn : TypeAlias
 		{
-			public extern static implicit operator WeekdaySimpleFn(Func<Moment, string> value);
+			public WeekdaySimpleFn(Func<Moment, string> value) { Value = value; }
+			public static implicit operator WeekdaySimpleFn(Func<Moment, string> value) { return new WeekdaySimpleFn(value); }
 		}
 		public partial interface LocaleSpecification
 		{
@@ -291,13 +299,14 @@ namespace LivingThing.TCCS.Definitions
 		{
 			object __momentBuiltinFormatBrand { get; set; }
 		}
-		public class MomentFormatSpecification
+		public class MomentFormatSpecification : TypeAlias
 		{
-			public extern static implicit operator MomentFormatSpecification(Union<string, MomentBuiltinFormat, Union<string, MomentBuiltinFormat>[]> value);
+			public MomentFormatSpecification(Union<string, MomentBuiltinFormat, Union<string, MomentBuiltinFormat>[]> value) { Value = value; }
+			public static implicit operator MomentFormatSpecification(Union<string, MomentBuiltinFormat, Union<string, MomentBuiltinFormat>[]> value) { return new MomentFormatSpecification(value); }
 		}
 		public partial class unitOfTime
 		{
-			public class Base
+			public class unitOfTimeType_0 : Enumerated
 			{
 				public static string year = "year";
 				public static string years = "years";
@@ -323,99 +332,93 @@ namespace LivingThing.TCCS.Definitions
 				public static string millisecond = "millisecond";
 				public static string milliseconds = "milliseconds";
 				public static string ms = "ms";
-				public extern static implicit operator Base(string value);
+				public static implicit operator unitOfTimeType_0(string value) { return new unitOfTimeType_0(value); }
+				public unitOfTimeType_0(object value) { Value = value; }
 			}
-			public class _quarter
+			public class Base : TypeAlias
+			{
+				public Base(unitOfTimeType_0 value) { Value = value; }
+				public static implicit operator Base(unitOfTimeType_0 value) { return new Base(value); }
+			}
+			public class _quarter : Enumerated
 			{
 				public static string quarter = "quarter";
 				public static string quarters = "quarters";
 				public static string Q = "Q";
-				public extern static implicit operator _quarter(string value);
+				public static implicit operator _quarter(string value) { return new _quarter(value); }
+				public _quarter(object value) { Value = value; }
 			}
-			public class _isoWeek
+			public class _isoWeek : Enumerated
 			{
 				public static string isoWeek = "isoWeek";
 				public static string isoWeeks = "isoWeeks";
 				public static string W = "W";
-				public extern static implicit operator _isoWeek(string value);
+				public static implicit operator _isoWeek(string value) { return new _isoWeek(value); }
+				public _isoWeek(object value) { Value = value; }
 			}
-			public class _date
+			public class _date : Enumerated
 			{
 				public static string date = "date";
 				public static string dates = "dates";
 				public static string D = "D";
-				public extern static implicit operator _date(string value);
+				public static implicit operator _date(string value) { return new _date(value); }
+				public _date(object value) { Value = value; }
 			}
-			public class DurationConstructor
+			public class DurationConstructor : TypeAlias
 			{
-				public extern static implicit operator DurationConstructor(Union<Base, _quarter> value);
+				public DurationConstructor(Union<Base, _quarter> value) { Value = value; }
+				public static implicit operator DurationConstructor(Union<Base, _quarter> value) { return new DurationConstructor(value); }
 			}
-			public class DurationAs
+			public class DurationAs : TypeAlias
 			{
-				public extern static implicit operator DurationAs(Base value);
+				public DurationAs(Base value) { Value = value; }
+				public static implicit operator DurationAs(Base value) { return new DurationAs(value); }
 			}
-			public class StartOf
+			public class StartOf : TypeAlias
 			{
-				public extern static implicit operator StartOf(Union<Base, _quarter, _isoWeek, _date, undefined> value);
+				public StartOf(Union<Base, _quarter, _isoWeek, _date, undefined> value) { Value = value; }
+				public static implicit operator StartOf(Union<Base, _quarter, _isoWeek, _date, undefined> value) { return new StartOf(value); }
 			}
-			public class Diff
+			public class Diff : TypeAlias
 			{
-				public extern static implicit operator Diff(Union<Base, _quarter> value);
+				public Diff(Union<Base, _quarter> value) { Value = value; }
+				public static implicit operator Diff(Union<Base, _quarter> value) { return new Diff(value); }
 			}
-			public class MomentConstructor
+			public class MomentConstructor : TypeAlias
 			{
-				public extern static implicit operator MomentConstructor(Union<Base, _date> value);
+				public MomentConstructor(Union<Base, _date> value) { Value = value; }
+				public static implicit operator MomentConstructor(Union<Base, _date> value) { return new MomentConstructor(value); }
 			}
-			public class All
+			public class All : Enumerated
 			{
-				public class Base
+				public class Base : TypeAlias
 				{
-					public static string year = "year";
-					public static string years = "years";
-					public static string y = "y";
-					public static string month = "month";
-					public static string months = "months";
-					public static string M = "M";
-					public static string week = "week";
-					public static string weeks = "weeks";
-					public static string w = "w";
-					public static string day = "day";
-					public static string days = "days";
-					public static string d = "d";
-					public static string hour = "hour";
-					public static string hours = "hours";
-					public static string h = "h";
-					public static string minute = "minute";
-					public static string minutes = "minutes";
-					public static string m = "m";
-					public static string second = "second";
-					public static string seconds = "seconds";
-					public static string s = "s";
-					public static string millisecond = "millisecond";
-					public static string milliseconds = "milliseconds";
-					public static string ms = "ms";
-					public extern static implicit operator Base(string value);
+					public Base(unitOfTimeType_0 value) { Value = value; }
+					public static implicit operator Base(unitOfTimeType_0 value) { return new Base(value); }
 				}
-				public class _quarter
+				public class _quarter : Enumerated
 				{
 					public static string quarter = "quarter";
 					public static string quarters = "quarters";
 					public static string Q = "Q";
-					public extern static implicit operator _quarter(string value);
+					public static implicit operator _quarter(string value) { return new _quarter(value); }
+					public _quarter(object value) { Value = value; }
 				}
-				public class _isoWeek
+				public class _isoWeek : Enumerated
 				{
 					public static string isoWeek = "isoWeek";
 					public static string isoWeeks = "isoWeeks";
 					public static string W = "W";
-					public extern static implicit operator _isoWeek(string value);
+					public static implicit operator _isoWeek(string value) { return new _isoWeek(value); }
+					public _isoWeek(object value) { Value = value; }
 				}
-				public class _date
+				public class _date : Enumerated
 				{
 					public static string date = "date";
 					public static string dates = "dates";
 					public static string D = "D";
-					public extern static implicit operator _date(string value);
+					public static implicit operator _date(string value) { return new _date(value); }
+					public _date(object value) { Value = value; }
 				}
 				public static string weekYear = "weekYear";
 				public static string weekYears = "weekYears";
@@ -432,12 +435,14 @@ namespace LivingThing.TCCS.Definitions
 				public static string isoWeekday = "isoWeekday";
 				public static string isoWeekdays = "isoWeekdays";
 				public static string E = "E";
-				public extern static implicit operator All(Base value);
-				public extern static implicit operator All(_quarter value);
-				public extern static implicit operator All(_isoWeek value);
-				public extern static implicit operator All(_date value);
-				public extern static implicit operator All(string value);
+				public static implicit operator All(Base value) { return new All(value); }
+				public static implicit operator All(_quarter value) { return new All(value); }
+				public static implicit operator All(_isoWeek value) { return new All(value); }
+				public static implicit operator All(_date value) { return new All(value); }
+				public static implicit operator All(string value) { return new All(value); }
+				public All(object value) { Value = value; }
 			}
+			public unitOfTime() { }
 		}
 		public partial interface MomentInputObject
 		{
@@ -507,21 +512,25 @@ namespace LivingThing.TCCS.Definitions
 			MomentInput from { get; set; }
 			MomentInput to { get; set; }
 		}
-		public class MomentInput
+		public class MomentInput : TypeAlias
 		{
-			public extern static implicit operator MomentInput(Union<Moment, Date, string, double, Union<double, string>[], MomentInputObject, undefined> value);
+			public MomentInput(Union<Moment, Date, string, double, Union<double, string>[], MomentInputObject, undefined> value) { Value = value; }
+			public static implicit operator MomentInput(Union<Moment, Date, string, double, Union<double, string>[], MomentInputObject, undefined> value) { return new MomentInput(value); }
 		}
-		public class DurationInputArg1
+		public class DurationInputArg1 : TypeAlias
 		{
-			public extern static implicit operator DurationInputArg1(Union<Duration, double, string, FromTo, DurationInputObject, undefined> value);
+			public DurationInputArg1(Union<Duration, double, string, FromTo, DurationInputObject, undefined> value) { Value = value; }
+			public static implicit operator DurationInputArg1(Union<Duration, double, string, FromTo, DurationInputObject, undefined> value) { return new DurationInputArg1(value); }
 		}
-		public class DurationInputArg2
+		public class DurationInputArg2 : TypeAlias
 		{
-			public extern static implicit operator DurationInputArg2(unitOfTime.DurationConstructor value);
+			public DurationInputArg2(unitOfTime.DurationConstructor value) { Value = value; }
+			public static implicit operator DurationInputArg2(unitOfTime.DurationConstructor value) { return new DurationInputArg2(value); }
 		}
-		public class LocaleSpecifier
+		public class LocaleSpecifier : TypeAlias
 		{
-			public extern static implicit operator LocaleSpecifier(Union<string, Moment, Duration, string[], bool> value);
+			public LocaleSpecifier(Union<string, Moment, Duration, string[], bool> value) { Value = value; }
+			public static implicit operator LocaleSpecifier(Union<string, Moment, Duration, string[], bool> value) { return new LocaleSpecifier(value); }
 		}
 		public partial interface MomentCreationData
 		{
@@ -638,15 +647,16 @@ namespace LivingThing.TCCS.Definitions
 			Moment set(MomentSetObject objectLiteral);
 			MomentObjectOutput toObject();
 		}
-		public class MomentType_0
+		public class MomentType_0 : Enumerated
 		{
-			public static string _1 = "()";
-			public static string _2 = "[)";
-			public static string _3 = "(]";
-			public static string _4 = "[]";
-			public extern static implicit operator MomentType_0(string value);
+			public static string __ = "()";
+			public static string ___ = "[)";
+			public static string ____ = "(]";
+			public static string _____ = "[]";
+			public static implicit operator MomentType_0(string value) { return new MomentType_0(value); }
+			public MomentType_0(object value) { Value = value; }
 		}
-		public partial interface iHTML5_FMT
+		public partial interface momentType_3
 		{
 			string DATETIME_LOCAL { get; set; }
 			string DATETIME_LOCAL_SECONDS { get; set; }
@@ -658,46 +668,47 @@ namespace LivingThing.TCCS.Definitions
 			string WEEK { get; set; }
 			string MONTH { get; set; }
 		}
-		public extern static string version { get; set; }
-		public extern static Moment fn { get; set; }
-		public extern static MomentBuiltinFormat ISO_8601 { get; set; }
-		public extern static MomentBuiltinFormat RFC_2822 { get; set; }
-		public extern static string defaultFormat { get; set; }
-		public extern static string defaultFormatUtc { get; set; }
-		public extern static iHTML5_FMT HTML5_FMT { get; set; }
-		public extern static Moment utc(MomentInput inp, MomentFormatSpecification format, bool strict);
-		public extern static Moment utc(MomentInput inp, MomentFormatSpecification format, string language, bool strict);
-		public extern static Moment unix(double timestamp);
-		public extern static Moment invalid(MomentParsingFlagsOpt flags);
-		public extern static bool isMoment(object m);
-		public extern static bool isDate(object m);
-		public extern static bool isDuration(object d);
-		public extern static string lang(string language);
-		public extern static string lang(string language, Locale definition);
-		public extern static string locale(string language);
-		public extern static string locale(string[] language);
-		public extern static string locale(string language, Union<LocaleSpecification, undefined> definition);
-		public extern static Locale localeData(Union<string, string[]> key);
-		public extern static Duration duration(DurationInputArg1 inp, DurationInputArg2 unit);
-		public extern static Moment parseZone(MomentInput inp, MomentFormatSpecification format, bool strict);
-		public extern static Moment parseZone(MomentInput inp, MomentFormatSpecification format, string language, bool strict);
-		public extern static string[] months();
-		public extern static string[] monthsShort();
-		public extern static string[] weekdays();
-		public extern static string[] weekdaysShort();
-		public extern static string[] weekdaysMin();
-		public extern static Moment min(Moment[] moments);
-		public extern static Moment max(Moment[] moments);
-		public extern static double now();
-		public extern static Locale defineLocale(string language, Union<LocaleSpecification, undefined> localeSpec);
-		public extern static Locale updateLocale(string language, Union<LocaleSpecification, undefined> localeSpec);
-		public extern static string[] locales();
-		public extern static string normalizeUnits(unitOfTime.All unit);
-		public extern static Union<double, bool> relativeTimeThreshold(string threshold);
-		public extern static bool relativeTimeThreshold(string threshold, double limit);
-		public extern static bool relativeTimeRounding(Func<double, double> fn);
-		public extern static Func<double, double> relativeTimeRounding();
-		public extern static string calendarFormat(Moment m, Moment now);
-		public extern static double parseTwoDigitYear(string input);
+		public virtual string version { get; set; }
+		public virtual Moment fn { get; set; }
+		public virtual MomentBuiltinFormat ISO_8601 { get; set; }
+		public virtual MomentBuiltinFormat RFC_2822 { get; set; }
+		public virtual string defaultFormat { get; set; }
+		public virtual string defaultFormatUtc { get; set; }
+		public virtual momentType_3 HTML5_FMT { get; set; }
+		public virtual Moment utc(MomentInput inp, MomentFormatSpecification format, bool strict) => default(Moment);
+		public virtual Moment utc(MomentInput inp, MomentFormatSpecification format, string language, bool strict) => default(Moment);
+		public virtual Moment unix(double timestamp) => default(Moment);
+		public virtual Moment invalid(MomentParsingFlagsOpt flags) => default(Moment);
+		public virtual bool isMoment(object m) => default(bool);
+		public virtual bool isDate(object m) => default(bool);
+		public virtual bool isDuration(object d) => default(bool);
+		public virtual string lang(string language) => default(string);
+		public virtual string lang(string language, Locale definition) => default(string);
+		public virtual string locale(string language) => default(string);
+		public virtual string locale(string[] language) => default(string);
+		public virtual string locale(string language, Union<LocaleSpecification, undefined> definition) => default(string);
+		public virtual Locale localeData(Union<string, string[]> key) => default(Locale);
+		public virtual Duration duration(DurationInputArg1 inp, DurationInputArg2 unit) => default(Duration);
+		public virtual Moment parseZone(MomentInput inp, MomentFormatSpecification format, bool strict) => default(Moment);
+		public virtual Moment parseZone(MomentInput inp, MomentFormatSpecification format, string language, bool strict) => default(Moment);
+		public virtual string[] months() => default(string[]);
+		public virtual string[] monthsShort() => default(string[]);
+		public virtual string[] weekdays() => default(string[]);
+		public virtual string[] weekdaysShort() => default(string[]);
+		public virtual string[] weekdaysMin() => default(string[]);
+		public virtual Moment min(Moment[] moments) => default(Moment);
+		public virtual Moment max(Moment[] moments) => default(Moment);
+		public virtual double now() => default(double);
+		public virtual Locale defineLocale(string language, Union<LocaleSpecification, undefined> localeSpec) => default(Locale);
+		public virtual Locale updateLocale(string language, Union<LocaleSpecification, undefined> localeSpec) => default(Locale);
+		public virtual string[] locales() => default(string[]);
+		public virtual string normalizeUnits(unitOfTime.All unit) => default(string);
+		public virtual Union<double, bool> relativeTimeThreshold(string threshold) => default(Union<double, bool>);
+		public virtual bool relativeTimeThreshold(string threshold, double limit) => default(bool);
+		public virtual bool relativeTimeRounding(Func<double, double> fn) => default(bool);
+		public virtual Func<double, double> relativeTimeRounding() => default(Func<double, double>);
+		public virtual string calendarFormat(Moment m, Moment now) => default(string);
+		public virtual double parseTwoDigitYear(string input) => default(double);
+		public moment() { }
 	}
 }

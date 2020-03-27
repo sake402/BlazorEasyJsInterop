@@ -8,6 +8,7 @@ namespace LivingThing.TCCS.Core
     internal class DefinitionContext
     {
         public IScriptInterceptor Interceptor { get; set; }
-        public IWatchDefinition Watcher { get; set; }
+        public object Defined { get; set; }
+        //public IWatchDefinition Watcher { get; set; }
     }
 }

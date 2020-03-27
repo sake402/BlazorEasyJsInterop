@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
-using LivingThing;
-using LivingThing.TCCS.Core;
 using LivingThing.TCCS.Definitions.Util;
 using LivingThing.TCCS.Interface;
 using LivingThing.TCCS.Scopes;
-using System.Text.Json;
 
 namespace LivingThing.TCCS.Util
 {
@@ -33,27 +29,34 @@ namespace LivingThing.TCCS.Util
                 if (type.IsArray && parameter is IEnumerable array)
                 {
                     var enumerator = array.GetEnumerator();
-                    enumerator.MoveNext();
-                    object first = enumerator.Current;
-                    var firstType = first?.GetType();
-                    if (firstType != null && (firstType != typeof(string)))
+                    bool hasContent = enumerator.MoveNext();
+                    if (hasContent)
                     {
-                        List<object> items = new List<object>();
-                        foreach (var item in array)
+                        object first = enumerator.Current;
+                        var firstType = first?.GetType();
+                        if (firstType != null && (firstType != typeof(string)))
                         {
-                            bool noBag=false;
-                            items.Add(DoUnWrap(item, scope, parameterized, i, ref noBag));
+                            List<object> items = new List<object>();
+                            foreach (var item in array)
+                            {
+                                bool noBag = false;
+                                items.Add(DoUnWrap(item, scope, parameterized, i, ref noBag));
+                            }
+                            parameter = items.ToArray();
                         }
-                        parameter = items.ToArray();
                     }
                 }
                 //if (scope != null && type.Name.EndsWith("Proxy"))
                 //{
                 //    parameter = scope.Generator.Definitions[parameter].Interceptor.Target;
                 //}
-                if (scope != null && scope.Generator.Definitions.ContainsKey(parameter))
+                if (scope != null)
                 {
-                    parameter = scope.Generator.Definitions[parameter].Interceptor.Target;
+                    var definition = scope.Generator.GetDefinition(parameter);
+                    if (definition != null)
+                    {
+                        parameter = definition.Interceptor.Target;
+                    }
                 }
                 if (parameter is ICodeResult mresult)
                 {

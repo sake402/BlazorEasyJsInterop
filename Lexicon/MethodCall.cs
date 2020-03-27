@@ -1,16 +1,18 @@
 ﻿using LivingThing.TCCS.Attributes;
 using LivingThing.TCCS.Interface;
 using LivingThing.TCCS.Scopes;
+using LivingThing.TCCS.Util;
+using System;
 using System.Linq;
 using System.Reflection;
 
 namespace LivingThing.TCCS.Lexicon
 {
-    internal class Method: CodeConstruct, IParameterized, ICodeResult
+    internal class MethodCall: CodeConstruct, IParameterized, ICodeResult
     {
-        public Method(GeneratorScope generatorScope, CodeConstruct parent, MethodInfo method, object[] paramaters):base(generatorScope, parent, paramaters)
+        public MethodCall(GeneratorScope generatorScope, CodeConstruct parent, MethodInfo method, object[] paramaters):base(generatorScope, parent, paramaters)
         {
-            InterfaceMethod = method;
+            Method = method;
         }
 
         //public Method(GeneratorScope generatorScope, string code, object[] paramaters) : base(generatorScope, null)
@@ -20,32 +22,30 @@ namespace LivingThing.TCCS.Lexicon
         //    generatorScope.Codes.Add(this);
         //}
 
-        protected MethodInfo InterfaceMethod { get; }
+        protected MethodInfo Method { get; }
 
-        protected int Depth => ((From as Method)?.Depth ?? -1) + 1;
+        public override Type[] ParameterTypes => Method.GetParameters().Select(m => m.ParameterType).ToArray();
+
+        protected int Depth => ((From as MethodCall)?.Depth ?? -1) + 1;
 
         protected string JavascriptCode
         {
             get
             {
-                var nameAttr = InterfaceMethod?.GetCustomAttribute<NameAttribute>();
-                string methodName = nameAttr?.Name ?? Scope.Generator.Options?.MethodNameFormatter?.Invoke(InterfaceMethod) ?? InterfaceMethod.Name;
+                var nameAttr = Method?.GetCustomAttribute<NameAttribute>();
+                string methodName = nameAttr?.Name ?? Scope.Generator.Options?.MethodNameFormatter?.Invoke(Method) ?? Method.Name;
                 var parameters = GetParameters();
                 var code = $"{methodName}({string.Join(", ", parameters)})";
-                if (InterfaceMethod.ReturnType == null && parameters.Count() == 1) //property setter
-                {
-                    code = $"{methodName} = {parameters[0]}";
-                }
                 if (From != null)
                 {
-                    if (From.VariableName != null)
+                    if (From.HasVariableName)
                         code = $"{From.VariableName}.{code}";
                     else
-                    code = $"{(From as Method).JavascriptCode}.{code}";
+                        code = $"{From}.{code}";
                 }
-                if (VariableName != null)
+                if (HasVariableName)
                 {
-                    return $"var {VariableName} = {code}";
+                    return $"{VariableDeclaration} = {code}";
                 }
                 else
                 {
@@ -54,12 +54,12 @@ namespace LivingThing.TCCS.Lexicon
             }
         }
 
-        string IParameterized.ParameterName => VariableName;
+        //public override string ParameterName => VariableName;
 
-        Method GetMethod(MethodInfo method, object[] paramaters = null)
-        {
-            return new Method(Scope.Generator.CurrentScope, this, method, paramaters);
-        }
+        //MethodCall GetMethod(MethodInfo method, object[] paramaters = null)
+        //{
+        //    return new MethodCall(Scope.Generator.CurrentScope, this, method, paramaters);
+        //}
 
         //public void Execute(IJavaScriptRunner javaScript)
         //{
@@ -100,10 +100,11 @@ namespace LivingThing.TCCS.Lexicon
             return JavascriptCode;
         }
 
-        public override ICodeConstruct Navigate(MethodInfo method, object[] paramaters = null)
-        {
-            return GetMethod(method, paramaters);
-        }
+        //public override ICodeConstruct Navigate(MethodInfo method, object[] paramaters = null)
+        //{
+        //    variableName ??= Utility.GenerateVariableName();
+        //    return GetMethod(method, paramaters);
+        //}
     }
 
 }

@@ -11,11 +11,11 @@ namespace LivingThing.TCCS.Scopes
 
         public ForLoopScope(string name, object start, object step, object limit, GeneratorScope scope):base(scope.Generator, false, scope)
         {
-            ParameterName = name;
+            ParameterNamePrefix = name;
             parameterKey = ParameterBag.SetMany(this, start, step, limit);
         }
 
-        public string ParameterName { get; set; }
+        public string ParameterNamePrefix { get; set; }
 
         public override string ToString()
         {

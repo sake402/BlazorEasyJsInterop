@@ -15,11 +15,17 @@ namespace LivingThing.TCCS.Lexicon
         MethodInfo Method { get; }
         public override string ToString()
         {
-            if (From is InstancePropertyInitializer)
+            var parameters = GetParameters();
+            if (Method.Name == "set_Item")
             {
-
+                var key = Scope.ParameterBag[parameters[0].ToString()];
+                //Scope.ParameterBag.Remove(parameters[0].ToString());
+                return $"\"{key}\" : {parameters[1]}";
             }
-            return $"{Method.Name.Replace("set_", "")} : {GetParameters()[0]}";
+            else
+            {
+                return $"{Method.Name.Replace("set_", "")} : {parameters[0]}";
+            }
         }
     }
 }

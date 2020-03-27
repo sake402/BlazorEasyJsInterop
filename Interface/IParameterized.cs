@@ -6,6 +6,8 @@ namespace LivingThing.TCCS.Interface
 {
     public interface IParameterized
     {
-        string ParameterName { get; }
+        string ParameterNamePrefix { get; }
+        object[] Parameters { get; }
+        Type[] ParameterTypes { get; }
     }
 }

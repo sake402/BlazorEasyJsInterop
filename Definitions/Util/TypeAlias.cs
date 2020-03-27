@@ -4,8 +4,13 @@ using System.Text;
 
 namespace LivingThing.TCCS.Definitions.Util
 {
-    public class TypeAlias
+    public abstract class TypeAlias
     {
         public object Value { get; set; }
+    }
+
+    public abstract class TypeAlias<T> : TypeAlias
+    {
+
     }
 }

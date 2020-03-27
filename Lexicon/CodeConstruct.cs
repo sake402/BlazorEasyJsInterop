@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Reflection;
-using System.Text.Json;
 using LivingThing.TCCS.Interface;
 using LivingThing.TCCS.Scopes;
 using LivingThing.TCCS.Util;
@@ -14,17 +12,26 @@ namespace LivingThing.TCCS.Lexicon
         public GeneratorScope Scope { get; }
         public CodeConstruct From { get; }
         public object[] Parameters { get; }
+        public virtual Type[] ParameterTypes => Parameters.Select(p => p?.GetType()).ToArray();
         protected string variableName;
-        public string VariableName => variableName ??= Util.Utility.GenerateVariableName();
+        public bool HasVariableName => !string.IsNullOrEmpty(variableName);
+        public string VariableName
+        {
+            get => variableName ??= Utility.GenerateVariableName();
+            set { variableName = value; }
+        }
         protected string parameterName;
-        public string ParameterName => parameterName ??= Util.Utility.GenerateVariableName();
+        public virtual string ParameterNamePrefix => parameterName ??= Utility.GenerateVariableName();
+
+        protected string VariableDeclaration => VariableName.StartsWith("x.") || VariableName.StartsWith("(") ? VariableName : "var " + VariableName;
 
         protected CodeConstruct(GeneratorScope scope, CodeConstruct from, object[] parameters)
         {
             Scope = scope;
             From = from;
             Parameters = parameters;
-            scope.Codes.Add(this);
+            if (scope != null)
+                scope.Codes.Add(this);
         }
 
 
@@ -32,25 +39,28 @@ namespace LivingThing.TCCS.Lexicon
 
         ICodeConstruct ICodeConstruct.From => From;
 
-        object Resolve(object parameter, int index)
-        {
-            if (parameter != null && Scope.Generator.Definitions.ContainsKey(parameter))
-            {
-                var ic = Scope.Generator.Definitions[parameter];
-                var target = ic.Interceptor.Target;
-                if (target is ICodeResult result)
-                    return result.VariableName;
-            }
-            if (parameter is ICodeResult mresult)
-                return mresult.VariableName;
-            return Scope.ParameterBag.Set(this, Parameters.Length > 1 ? index : -1, parameter);
-        }
+        //object Resolve(object parameter, int index)
+        //{
+        //    if (parameter != null)
+        //    {
+        //        var definition = Scope.Generator.GetDefinition(parameter);
+        //        if (definition != null)
+        //        {
+        //            var target = definition.Interceptor.Target;
+        //            if (target is ICodeResult result)
+        //                return result.VariableName;
+        //        }
+        //    }
+        //    if (parameter is ICodeResult mresult)
+        //        return mresult.VariableName;
+        //    return Scope.ParameterBag.Set(this, Parameters.Length > 1 ? index : -1, parameter);
+        //}
 
         protected object[] GetParameters()
         {
             return Parameters.Select((p, i) =>
             {
-                var parameter = p.UnWrap(Scope, this, Parameters.Length > 1 ? i : -1);
+                var parameter = p.UnWrap(Scope, this, i);
                 //if (parameter is IEnumerable array && !(parameter is string))
                 //{
                 //    string sparam = "[ ";
@@ -98,7 +108,16 @@ namespace LivingThing.TCCS.Lexicon
 
         public virtual ICodeConstruct Navigate(MethodInfo method, object[] parameters)
         {
+            variableName ??= Utility.GenerateVariableName();
             return this.TryNavigate(method, parameters);
+        }
+
+        public virtual void OnAssignedTo(MethodInfo method)
+        {
+            //if (!(Scope is IInstanceInitializerScope iScope) && !iScope.IsPropertyInitialization)
+            {
+                variableName ??= Utility.GenerateVariableName();
+            }
         }
     }
 }

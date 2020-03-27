@@ -9,15 +9,15 @@ namespace LivingThing.TCCS.Lexicon
         {
             if (method.Name.StartsWith("set_"))
             {
-                return new PropertySetter(from.Scope, from, method, parameters);
+                return new PropertySetter(from.Scope.Generator.CurrentScope, from, method, parameters);
             }
             else if (method.Name.StartsWith("get_"))
             {
-                return new PropertyGetter(from.Scope, from, method, parameters);
+                return new PropertyGetter(from.Scope.Generator.CurrentScope, from, method, parameters);
             }
             else
             {
-                return new Method(from.Scope, from, method, parameters);
+                return new MethodCall(from.Scope.Generator.CurrentScope, from, method, parameters);
             }
             return null;
         }

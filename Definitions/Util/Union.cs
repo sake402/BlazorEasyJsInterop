@@ -318,4 +318,43 @@ namespace LivingThing.TCCS.Definitions.Util
             return new Union<T1, T2, T3, T4, T5, T6, T7, T8>(value);
         }
     }
+    public class Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> : Union
+    {
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T1 value)
+        {
+            return new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>() { Value = value };
+        }
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T2 value)
+        {
+            return new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>() { Value = value };
+        }
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T3 value)
+        {
+            return new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>() { Value = value };
+        }
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T4 value)
+        {
+            return new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>() { Value = value };
+        }
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T5 value)
+        {
+            return new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>() { Value = value };
+        }
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T6 value)
+        {
+            return new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>() { Value = value };
+        }
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T7 value)
+        {
+            return new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>() { Value = value };
+        }
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T8 value)
+        {
+            return new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>() { Value = value };
+        }
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T9 value)
+        {
+            return new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>() { Value = value };
+        }
+    }
 }

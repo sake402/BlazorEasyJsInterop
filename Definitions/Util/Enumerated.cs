@@ -4,8 +4,13 @@ using System.Text;
 
 namespace LivingThing.TCCS.Definitions.Util
 {
-    public class Enumerated
+    public abstract class Enumerated
     {
        public object Value { get; set; }
+    }
+
+    public abstract class Enumerated<T> : Enumerated
+    {
+
     }
 }

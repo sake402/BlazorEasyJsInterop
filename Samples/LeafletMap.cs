@@ -18,9 +18,9 @@ namespace LivingThing.TCCS.Samples
                 DisableParameterBag = true
             });
             Leaflet.Map map = null;
-            var scope = await generator.StoredProcedure(async scope =>
+            var scope = await generator.Function<object>(async (scope, parameter) =>
             {
-                var L = await scope.GetDefinition<Leaflet>();
+                var L = scope.GetDefinition<Leaflet>();
                 map = L.map("map", scope.Instantiate<Leaflet.MapOptions>((scope, op) =>
                 {
                     op.dragging = true;
@@ -51,9 +51,9 @@ namespace LivingThing.TCCS.Samples
                     .openPopup(null);
                 }
             });
-            _ = scope.Execute<object>(null, true);
+            _ = scope.Execute(null, null, true);
             //scope.ParameterBag.Set(map, "map2");
-            _ = scope.Execute<object>();
+            _ = scope.Execute();
             System.Console.ReadLine();
         }
     }

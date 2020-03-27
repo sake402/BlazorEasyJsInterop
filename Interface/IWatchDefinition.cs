@@ -5,8 +5,8 @@ using System.Text;
 
 namespace LivingThing.TCCS.Interface
 {
-    public interface IWatchDefinition
-    {
-        void OnDefinitionAssignedTo(MethodInfo method);
-    }
+    //public interface IWatchDefinition
+    //{
+    //    void OnDefinitionAssignedTo(MethodInfo method);
+    //}
 }

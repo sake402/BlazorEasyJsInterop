@@ -5,7 +5,7 @@ namespace LivingThing.TCCS.Lexicon
 {
     internal class LiteralCode : CodeConstruct, ICodeResult
     {
-        public LiteralCode(GeneratorScope scope, string code) : base(scope, null, null)
+        public LiteralCode(GeneratorScope scope, string code, params object[] parameters) : base(scope, null, parameters)
         {
             Code = code;
         }
@@ -13,7 +13,11 @@ namespace LivingThing.TCCS.Lexicon
         string Code { get; }
         public override string ToString()
         {
-            return $"var {VariableName} = {Code}";
+            var code = string.Format(Code, GetParameters());
+            if (HasVariableName)
+                return $"var {VariableName} = {code}";
+            else
+                return code;
         }
     }
 }

@@ -4,7 +4,6 @@ using Date = System.DateTime;
 using LivingThing.TCCS.Attributes;
 using LivingThing.TCCS.Definitions.Javascript;
 using LivingThing.TCCS.Definitions.Util;
-
 #pragma warning disable CS0626
 #pragma warning disable CS0824
 #pragma warning disable CS0108
@@ -14,32 +13,36 @@ namespace LivingThing.TCCS.Definitions
 {
 	public partial class Chart
 	{
-		public partial interface ChartDefaults
+		public Chart(Union<string, CanvasRenderingContext2D, HTMLCanvasElement, Union<CanvasRenderingContext2D, HTMLCanvasElement>[]> context, Chart.ChartConfiguration options)
 		{
-			Union<Chart.ChartOptions, Chart.ChartFontOptions, ChartDefaultsType> global { get; set; }
+		}
+
+		public partial interface ChartType_0
+		{
+			Union<Chart.ChartOptions, Chart.ChartFontOptions, ChartType_0Type_0> global { get; set; }
 			object this[string key] { get; set; }
 		}
-		public partial interface ChartDefaultsType
+		public partial interface ChartType_0Type_0
 		{
 			Chart.ChartTooltipOptions tooltips { get; set; }
 		}
-		public partial interface ChartControllers
+		public partial interface ChartType_1
 		{
 			object this[string key] { get; set; }
 		}
-		public partial interface ChartHelpers
+		public partial interface ChartType_2
 		{
 			object this[string key] { get; set; }
 		}
-		public partial interface ChartPlatform
+		public partial interface ChartType_3
 		{
 			bool disableCSSInjection { get; set; }
 		}
-		public partial interface ChartInstances
+		public partial interface ChartType_4
 		{
 			Chart this[string key] { get; set; }
 		}
-		public class ChartType
+		public class ChartType : Enumerated
 		{
 			public static string line = "line";
 			public static string bar = "bar";
@@ -50,9 +53,10 @@ namespace LivingThing.TCCS.Definitions
 			public static string bubble = "bubble";
 			public static string pie = "pie";
 			public static string scatter = "scatter";
-			public extern static implicit operator ChartType(string value);
+			public static implicit operator ChartType(string value) { return new ChartType(value); }
+			public ChartType(object value) { Value = value; }
 		}
-		public class TimeUnit
+		public class TimeUnit : Enumerated
 		{
 			public static string millisecond = "millisecond";
 			public static string second = "second";
@@ -63,18 +67,20 @@ namespace LivingThing.TCCS.Definitions
 			public static string month = "month";
 			public static string quarter = "quarter";
 			public static string year = "year";
-			public extern static implicit operator TimeUnit(string value);
+			public static implicit operator TimeUnit(string value) { return new TimeUnit(value); }
+			public TimeUnit(object value) { Value = value; }
 		}
-		public class ScaleType
+		public class ScaleType : Enumerated
 		{
 			public static string category = "category";
 			public static string linear = "linear";
 			public static string logarithmic = "logarithmic";
 			public static string time = "time";
 			public static string radialLinear = "radialLinear";
-			public extern static implicit operator ScaleType(string value);
+			public static implicit operator ScaleType(string value) { return new ScaleType(value); }
+			public ScaleType(object value) { Value = value; }
 		}
-		public class PointStyle
+		public class PointStyle : Enumerated
 		{
 			public static string circle = "circle";
 			public static string cross = "cross";
@@ -86,18 +92,20 @@ namespace LivingThing.TCCS.Definitions
 			public static string rectRot = "rectRot";
 			public static string star = "star";
 			public static string triangle = "triangle";
-			public extern static implicit operator PointStyle(string value);
+			public static implicit operator PointStyle(string value) { return new PointStyle(value); }
+			public PointStyle(object value) { Value = value; }
 		}
-		public class PositionType
+		public class PositionType : Enumerated
 		{
 			public static string left = "left";
 			public static string right = "right";
 			public static string top = "top";
 			public static string bottom = "bottom";
 			public static string chartArea = "chartArea";
-			public extern static implicit operator PositionType(string value);
+			public static implicit operator PositionType(string value) { return new PositionType(value); }
+			public PositionType(object value) { Value = value; }
 		}
-		public class InteractionMode
+		public class InteractionMode : Enumerated
 		{
 			public static string point = "point";
 			public static string nearest = "nearest";
@@ -108,9 +116,10 @@ namespace LivingThing.TCCS.Definitions
 			public static string dataset = "dataset";
 			public static string x = "x";
 			public static string y = "y";
-			public extern static implicit operator InteractionMode(string value);
+			public static implicit operator InteractionMode(string value) { return new InteractionMode(value); }
+			public InteractionMode(object value) { Value = value; }
 		}
-		public class Easing
+		public class Easing : Enumerated
 		{
 			public static string linear = "linear";
 			public static string easeInQuad = "easeInQuad";
@@ -143,28 +152,32 @@ namespace LivingThing.TCCS.Definitions
 			public static string easeInBounce = "easeInBounce";
 			public static string easeOutBounce = "easeOutBounce";
 			public static string easeInOutBounce = "easeInOutBounce";
-			public extern static implicit operator Easing(string value);
+			public static implicit operator Easing(string value) { return new Easing(value); }
+			public Easing(object value) { Value = value; }
 		}
-		public class TextAlignment
+		public class TextAlignment : Enumerated
 		{
 			public static string left = "left";
 			public static string center = "center";
 			public static string right = "right";
-			public extern static implicit operator TextAlignment(string value);
+			public static implicit operator TextAlignment(string value) { return new TextAlignment(value); }
+			public TextAlignment(object value) { Value = value; }
 		}
-		public class BorderAlignment
+		public class BorderAlignment : Enumerated
 		{
 			public static string center = "center";
 			public static string inner = "inner";
-			public extern static implicit operator BorderAlignment(string value);
+			public static implicit operator BorderAlignment(string value) { return new BorderAlignment(value); }
+			public BorderAlignment(object value) { Value = value; }
 		}
-		public partial interface BorderWidthType
+		public partial interface ChartType_14
 		{
 			double this[PositionType key] { get; set; }
 		}
-		public class BorderWidth
+		public class BorderWidth : TypeAlias
 		{
-			public extern static implicit operator BorderWidth(Union<double, BorderWidthType> value);
+			public BorderWidth(Union<double, ChartType_14> value) { Value = value; }
+			public static implicit operator BorderWidth(Union<double, ChartType_14> value) { return new BorderWidth(value); }
 		}
 		public partial interface ChartArea
 		{
@@ -187,19 +200,21 @@ namespace LivingThing.TCCS.Definitions
 			string strokeStyle { get; set; }
 			PointStyle pointStyle { get; set; }
 		}
-		public class ChartLegendItemType_0
+		public class ChartLegendItemType_0 : Enumerated
 		{
 			public static string butt = "butt";
 			public static string round = "round";
 			public static string square = "square";
-			public extern static implicit operator ChartLegendItemType_0(string value);
+			public static implicit operator ChartLegendItemType_0(string value) { return new ChartLegendItemType_0(value); }
+			public ChartLegendItemType_0(object value) { Value = value; }
 		}
-		public class ChartLegendItemType_1
+		public class ChartLegendItemType_1 : Enumerated
 		{
 			public static string bevel = "bevel";
 			public static string round = "round";
 			public static string miter = "miter";
-			public extern static implicit operator ChartLegendItemType_1(string value);
+			public static implicit operator ChartLegendItemType_1(string value) { return new ChartLegendItemType_1(value); }
+			public ChartLegendItemType_1(object value) { Value = value; }
 		}
 		public partial interface ChartLegendLabelItem : ChartLegendItem
 		{
@@ -329,12 +344,13 @@ namespace LivingThing.TCCS.Definitions
 			void onHover(MouseEvent @event, ChartLegendLabelItem legendItem);
 			void onLeave(MouseEvent @event, ChartLegendLabelItem legendItem);
 		}
-		public class ChartLegendOptionsType_0
+		public class ChartLegendOptionsType_0 : Enumerated
 		{
 			public static string center = "center";
 			public static string end = "end";
 			public static string start = "start";
-			public extern static implicit operator ChartLegendOptionsType_0(string value);
+			public static implicit operator ChartLegendOptionsType_0(string value) { return new ChartLegendOptionsType_0(value); }
+			public ChartLegendOptionsType_0(object value) { Value = value; }
 		}
 		public partial interface ChartLegendLabelOptions
 		{
@@ -451,15 +467,16 @@ namespace LivingThing.TCCS.Definitions
 		}
 		public partial interface ChartTooltipsStaticConfiguration
 		{
-			ChartTooltipsStaticConfigurationType positioners { get; set; }
+			ChartTooltipsStaticConfigurationType_0 positioners { get; set; }
 		}
-		public partial interface ChartTooltipsStaticConfigurationType
+		public partial interface ChartTooltipsStaticConfigurationType_0
 		{
 			ChartTooltipPositioner this[string mode] { get; set; }
 		}
-		public class ChartTooltipPositioner
+		public class ChartTooltipPositioner : TypeAlias
 		{
-			public extern static implicit operator ChartTooltipPositioner(Func<object[], Point, Point> value);
+			public ChartTooltipPositioner(Func<object[], Point, Point> value) { Value = value; }
+			public static implicit operator ChartTooltipPositioner(Func<object[], Point, Point> value) { return new ChartTooltipPositioner(value); }
 		}
 		public partial interface ChartHoverOptions
 		{
@@ -514,19 +531,21 @@ namespace LivingThing.TCCS.Definitions
 			ChartLineOptionsType_1 fill { get; set; }
 			bool stepped { get; set; }
 		}
-		public class ChartLineOptionsType_0
+		public class ChartLineOptionsType_0 : Enumerated
 		{
 			public static string @default = "default";
 			public static string monotone = "monotone";
-			public extern static implicit operator ChartLineOptionsType_0(string value);
+			public static implicit operator ChartLineOptionsType_0(string value) { return new ChartLineOptionsType_0(value); }
+			public ChartLineOptionsType_0(object value) { Value = value; }
 		}
-		public class ChartLineOptionsType_1
+		public class ChartLineOptionsType_1 : Enumerated
 		{
 			public static string zero = "zero";
 			public static string top = "top";
 			public static string bottom = "bottom";
-			public extern static implicit operator ChartLineOptionsType_1(string value);
-			public extern static implicit operator ChartLineOptionsType_1(bool value);
+			public static implicit operator ChartLineOptionsType_1(string value) { return new ChartLineOptionsType_1(value); }
+			public static implicit operator ChartLineOptionsType_1(bool value) { return new ChartLineOptionsType_1(value); }
+			public ChartLineOptionsType_1(object value) { Value = value; }
 		}
 		public partial interface ChartPointOptions
 		{
@@ -623,12 +642,13 @@ namespace LivingThing.TCCS.Definitions
 			double suggestedMin { get; set; }
 			Union<string, double> callback(object value, object index, object values);
 		}
-		public class NestedTickOptionsType_0
+		public class NestedTickOptionsType_0 : Enumerated
 		{
 			public static string auto = "auto";
 			public static string data = "data";
 			public static string labels = "labels";
-			public extern static implicit operator NestedTickOptionsType_0(string value);
+			public static implicit operator NestedTickOptionsType_0(string value) { return new NestedTickOptionsType_0(value); }
+			public NestedTickOptionsType_0(object value) { Value = value; }
 		}
 		public partial interface MajorTickOptions : NestedTickOptions
 		{
@@ -662,20 +682,22 @@ namespace LivingThing.TCCS.Definitions
 		public partial interface LogarithmicTickOptions : TickOptions
 		{
 		}
-		public class ChartColor
+		public class ChartColor : TypeAlias
 		{
-			public extern static implicit operator ChartColor(Union<string, CanvasGradient, CanvasPattern, string[]> value);
+			public ChartColor(Union<string, CanvasGradient, CanvasPattern, string[]> value) { Value = value; }
+			public static implicit operator ChartColor(Union<string, CanvasGradient, CanvasPattern, string[]> value) { return new ChartColor(value); }
 		}
-		public partial interface ScriptableType
+		public partial interface ChartType_15
 		{
 			Chart chart { get; set; }
 			double dataIndex { get; set; }
 			ChartDataSets dataset { get; set; }
 			double datasetIndex { get; set; }
 		}
-		public class Scriptable<T>
+		public class Scriptable<T> : TypeAlias
 		{
-			public extern static implicit operator Scriptable<T>(Func<ScriptableType, T> value);
+			public Scriptable(Func<ChartType_15, T> value) { Value = value; }
+			public static implicit operator Scriptable<T>(Func<ChartType_15, T> value) { return new Scriptable<T>(value); }
 		}
 		public partial interface ChartDataSets
 		{
@@ -728,39 +750,45 @@ namespace LivingThing.TCCS.Definitions
 			bool spanGaps { get; set; }
 			double weight { get; set; }
 		}
-		public class ChartDataSetsType_0
+		public class ChartDataSetsType_0 : Enumerated
 		{
+			public ChartDataSetsType_0() { }
 			public static string @default = "default";
 			public static string monotone = "monotone";
-			public extern static implicit operator ChartDataSetsType_0(string value);
+			public static implicit operator ChartDataSetsType_0(string value) { return new ChartDataSetsType_0(value); }
+			public ChartDataSetsType_0(object value) { Value = value; }
 		}
-		public class ChartDataSetsType_1
+		public class ChartDataSetsType_1 : Enumerated
 		{
 			public static string flex = "flex";
-			public extern static implicit operator ChartDataSetsType_1(double value);
-			public extern static implicit operator ChartDataSetsType_1(string value);
+			public static implicit operator ChartDataSetsType_1(double value) { return new ChartDataSetsType_1(value); }
+			public static implicit operator ChartDataSetsType_1(string value) { return new ChartDataSetsType_1(value); }
+			public ChartDataSetsType_1(object value) { Value = value; }
 		}
-		public class ChartDataSetsType_2
+		public class ChartDataSetsType_2 : Enumerated
 		{
 			public static string butt = "butt";
 			public static string round = "round";
 			public static string square = "square";
-			public extern static implicit operator ChartDataSetsType_2(string value);
+			public static implicit operator ChartDataSetsType_2(string value) { return new ChartDataSetsType_2(value); }
+			public ChartDataSetsType_2(object value) { Value = value; }
 		}
-		public class ChartDataSetsType_3
+		public class ChartDataSetsType_3 : Enumerated
 		{
 			public static string bevel = "bevel";
 			public static string round = "round";
 			public static string miter = "miter";
-			public extern static implicit operator ChartDataSetsType_3(string value);
+			public static implicit operator ChartDataSetsType_3(string value) { return new ChartDataSetsType_3(value); }
+			public ChartDataSetsType_3(object value) { Value = value; }
 		}
-		public class ChartDataSetsType_4
+		public class ChartDataSetsType_4 : Enumerated
 		{
 			public static string before = "before";
 			public static string after = "after";
 			public static string middle = "middle";
-			public extern static implicit operator ChartDataSetsType_4(string value);
-			public extern static implicit operator ChartDataSetsType_4(bool value);
+			public static implicit operator ChartDataSetsType_4(string value) { return new ChartDataSetsType_4(value); }
+			public static implicit operator ChartDataSetsType_4(bool value) { return new ChartDataSetsType_4(value); }
+			public ChartDataSetsType_4(object value) { Value = value; }
 		}
 		public partial interface ChartScales
 		{
@@ -805,11 +833,12 @@ namespace LivingThing.TCCS.Definitions
 		{
 			ChartXAxeType_0 distribution { get; set; }
 		}
-		public class ChartXAxeType_0
+		public class ChartXAxeType_0 : Enumerated
 		{
 			public static string linear = "linear";
 			public static string series = "series";
-			public extern static implicit operator ChartXAxeType_0(string value);
+			public static implicit operator ChartXAxeType_0(string value) { return new ChartXAxeType_0(value); }
+			public ChartXAxeType_0(object value) { Value = value; }
 		}
 		public partial interface ChartYAxe : CommonAxe
 		{
@@ -921,60 +950,63 @@ namespace LivingThing.TCCS.Definitions
 			double x { get; set; }
 			double y { get; set; }
 		}
-		//public extern static Chart Chart { get; set; }
-		public extern Chart.ChartConfiguration config { get; set; }
-		public extern Chart.ChartData data { get; set; }
-		public extern Func<object> destroy { get; set; }
-		public extern Func<Chart.ChartUpdateProps, object> update { get; set; }
-		public extern Func<Chart.ChartRenderProps, object> render { get; set; }
-		public extern Func<Chart> stop { get; set; }
-		public extern Func<Chart> resize { get; set; }
-		public extern Func<Chart> clear { get; set; }
-		public extern Func<string> toBase64Image { get; set; }
-		public extern Func<object> generateLegend { get; set; }
-		public extern Func<object, object[]> getElementAtEvent { get; set; }
-		public extern Func<object, object[]> getElementsAtEvent { get; set; }
-		public extern Func<object, object[]> getDatasetAtEvent { get; set; }
-		public extern Func<double, Meta> getDatasetMeta { get; set; }
-		public extern Union<CanvasRenderingContext2D, object> ctx { get; set; }
-		public extern Union<HTMLCanvasElement, object> canvas { get; set; }
-		public extern Union<double, object> width { get; set; }
-		public extern Union<double, object> height { get; set; }
-		public extern Union<double, object> aspectRatio { get; set; }
-		public extern Chart.ChartOptions options { get; set; }
-		public extern Chart.ChartArea chartArea { get; set; }
-		public extern static PluginServiceStatic pluginService { get; set; }
-		public extern static PluginServiceStatic plugins { get; set; }
-		public extern static ChartDefaults defaults { get; set; }
-		public extern static ChartControllers controllers { get; set; }
-		public extern static ChartHelpers helpers { get; set; }
-		public extern static ChartPlatform platform { get; set; }
-		public extern static Chart.ChartTooltipsStaticConfiguration Tooltip { get; set; }
-		public extern static ChartInstances instances { get; set; }
+		[Name("Chart")]
+		public virtual Chart _Chart { get; set; }
+		public virtual Chart.ChartConfiguration config { get; set; }
+		public virtual Chart.ChartData data { get; set; }
+		public virtual Func<object> destroy { get; set; }
+		public virtual Func<Chart.ChartUpdateProps, object> update { get; set; }
+		public virtual Func<Chart.ChartRenderProps, object> render { get; set; }
+		public virtual Func<Chart> stop { get; set; }
+		public virtual Func<Chart> resize { get; set; }
+		public virtual Func<Chart> clear { get; set; }
+		public virtual Func<string> toBase64Image { get; set; }
+		public virtual Func<object> generateLegend { get; set; }
+		public virtual Func<object, object[]> getElementAtEvent { get; set; }
+		public virtual Func<object, object[]> getElementsAtEvent { get; set; }
+		public virtual Func<object, object[]> getDatasetAtEvent { get; set; }
+		public virtual Func<double, Meta> getDatasetMeta { get; set; }
+		public virtual Union<CanvasRenderingContext2D, object> ctx { get; set; }
+		public virtual Union<HTMLCanvasElement, object> canvas { get; set; }
+		public virtual Union<double, object> width { get; set; }
+		public virtual Union<double, object> height { get; set; }
+		public virtual Union<double, object> aspectRatio { get; set; }
+		public virtual Chart.ChartOptions options { get; set; }
+		public virtual Chart.ChartArea chartArea { get; set; }
+		public virtual PluginServiceStatic pluginService { get; set; }
+		public virtual PluginServiceStatic plugins { get; set; }
+		public virtual ChartType_0 defaults { get; set; }
+		public virtual ChartType_1 controllers { get; set; }
+		public virtual ChartType_2 helpers { get; set; }
+		public virtual ChartType_3 platform { get; set; }
+		public virtual Chart.ChartTooltipsStaticConfiguration Tooltip { get; set; }
+		public virtual ChartType_4 instances { get; set; }
+		public Chart(Union<string, CanvasRenderingContext2D, HTMLCanvasElement, Union<CanvasRenderingContext2D, HTMLCanvasElement>>[] context, Chart.ChartConfiguration options) { }
+		public Chart() { }
 	}
 	public partial class PluginServiceStatic
 	{
-		public extern void register(Union<Chart.PluginServiceGlobalRegistration, Chart.PluginServiceRegistrationOptions> plugin);
-		public extern void unregister(Union<Chart.PluginServiceGlobalRegistration, Chart.PluginServiceRegistrationOptions> plugin);
+		public virtual void register(Union<Chart.PluginServiceGlobalRegistration, Chart.PluginServiceRegistrationOptions> plugin) { }
+		public virtual void unregister(Union<Chart.PluginServiceGlobalRegistration, Chart.PluginServiceRegistrationOptions> plugin) { }
+		public PluginServiceStatic() { }
 	}
 	public partial interface Meta
 	{
 		Chart.ChartType type { get; set; }
 		MetaData[] data { get; set; }
 		Chart.ChartDataSets dataset { get; set; }
-		MetaController controller { get; set; }
+		MetaType_0 controller { get; set; }
 		bool hidden { get; set; }
 		string total { get; set; }
 		string xAxisID { get; set; }
 		string yAxisID { get; set; }
-		//Name["$filler"]
-		MetaFiller _filler { get; set; }
+		MetaType_1 _filler { get; set; }
 	}
-	public partial interface MetaController
+	public partial interface MetaType_0
 	{
 		object this[string key] { get; set; }
 	}
-	public partial interface MetaFiller
+	public partial interface MetaType_1
 	{
 		object this[string key] { get; set; }
 	}
