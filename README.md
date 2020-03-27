@@ -5,26 +5,49 @@ Add this to your scripts
 ------------------------
 
 ```JavaScript
-var functions = {};
+var scopes = {};
+var gens = {};
 
-window["lt"]["storeProcedure"] = function (key: string, code: string) {
-    var fun = new Function("p", code);
-    functions[key] = fun;
+window["lt"]["storeProcedure"] = function (gkey, skey, code, parameters) {
+    var scope = { f: new Function("p", "x", code), p:parameters }
+    scopes[skey] = scope;
+    gens[gkey] = { x: {} };
 }
 
-window["lt"]["execute"] = function (code: string, parameters: object[], key:string) {
-    var fun = new Function("p", code);
-    if (key !== null) {
-        functions[key] = fun;
+window["lt"]["execute"] = function (code, parameters, gkey, skey) {
+    var fun = new Function("p", "x", code);
+    var gen;
+    if (skey !== null) {
+        gen = gens[gkey] = { x: {} };
+        scopes[skey] = { f: fun };
     }
-    var returns = fun.call(this, parameters);
+    var returns = fun.call(fun, parameters, gen.x);
     return returns;
 }
 
-window["lt"]["executeStored"] = function (key: string, parameters: object[]) {
-    var fun = functions[key];
-    var returns = fun.call(this, parameters);
+window["lt"]["executeStored"] = function (gkey, skey, parameters) {
+    var scope = scopes[skey];
+    var gen = gens[gkey];
+    var p = { ...scope.p, ...parameters };
+    var returns = scope.f.call(scope.f, p, gen.x);
     return returns;
+}
+
+window["lt"]["createClass"] = function (gkey, skey, parameters) {
+    var scope = scopes[skey];
+    var gen = gens[gkey];
+    var p = { ...scope.p, ...parameters };
+    var mclass = scope.f.call(scope.f, p, gen.x);
+    scope.class = mclass;
+}
+
+window["lt"]["callMember"] = function (gkey, skey, member, parameters) {
+    var scope = scopes[skey];
+    var gen = gens[gkey];
+    var p = { ...scope.p, ...parameters };
+    var method = scope.class[member];
+    var returns = method.call(scope.class, p, gen.x);
+    returns;
 }
 ```
 
@@ -50,7 +73,7 @@ var generator = new Generator(new Executor(), new GeneratorOptions()
 {
 });
 Leaflet.Map map = null;
-var scope = await generator.StoredProcedure(async scope =>
+var scope = await generator.Function<object>(async scope =>
 {
     var L = await scope.GetDefinition<Leaflet>();
     map = L.map("map", scope.Instantiate<Leaflet.MapOptions>((scope, op) =>
